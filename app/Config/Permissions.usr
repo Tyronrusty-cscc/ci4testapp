@@ -1,0 +1,20 @@
+# CSCC Codeigniter 4 SAML Authentication and Authorization User permissions file.
+
+# The following applies to all users.
+# *,<permission1>,<permission2>
+# The following overrides all global (*) and group assignments for a specific user.
+# SAMAccountName,<permission1>,<permission2>
+# If the authenticated user is a member of the specified group, they will receive the associated permissions.
+# Group=cscc\somegroup,<permission1>,<permission2>
+role=admin,  \*
+role=nonadmin, \names\*, \names\add, \names\search, \names\view, \names\nonadmin
+role=test, \home\index
+
+*,\home\notauthorized, abcperm, role=test
+#jstaffor, \home\index, \home\view, \home\browse
+#jstaffor, \homex, perm1, perm2, perm3
+#jstaffor, role=nonadmin, \names\update
+#group=cscc\elmsuser, role=nonadmin, \test\elmsuser
+group=cscc\pclan, role=admin
+trusty, role=admin
+
