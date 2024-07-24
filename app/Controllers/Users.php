@@ -60,38 +60,50 @@ class Users extends BaseController
 	}
 
     public function register(){
+	
 		$data = [];
 		helper(['form']);
-
+	
 		if ($this->request->getMethod() == 'post') {
-			//let's do the validation here
+			log_message('debug', 'Request method is POST.');
+			// Let's do the validation here
 			$rules = [
 				'firstname' => 'required|min_length[3]|max_length[20]',
 				'lastname' => 'required|min_length[3]|max_length[20]',
-                'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
+				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
 				'password' => 'required|min_length[8]|max_length[255]',
 				'password_confirm' => 'matches[password]',
 			];
-
-			if (! $this->validate($rules)) {
+	
+			if (!$this->validate($rules)) {
 				$data['validation'] = $this->validator;
-                
-			}else{
+				log_message('debug', 'Validation failed: ' . print_r($this->validator->getErrors(), true));
+			} else {
 				$model = new UserModel();
-
+	
 				$newData = [
 					'firstname' => $this->request->getVar('firstname'),
 					'lastname' => $this->request->getVar('lastname'),
 					'email' => $this->request->getVar('email'),
 					'password' => $this->request->getVar('password'),
 				];
-				$model->save($newData);
-				$session = session();
-				$session->setFlashdata('success', 'Successful Registration');
-				return redirect()->to('/');
-
+	
+				log_message('debug', 'Data to be saved: ' . print_r($newData, true));
+	
+				if ($model->save($newData)) {
+					log_message('debug', 'User data saved successfully.');
+					$session = session();
+					$session->setFlashdata('success', 'Successful Registration');
+					return redirect()->to('/');
+				} else {
+					log_message('debug', 'Failed to save user data.');
+				}
 			}
+		} else {
+			log_message('debug', 'Request method is not POST.');
 		}
+	
+		return view('register', $data);
 
 
 		echo view('templates/header', $data);
