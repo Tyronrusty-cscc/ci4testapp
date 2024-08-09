@@ -26,12 +26,21 @@ class UserModelTest extends TestCase
             'lastname' => 'Doeh',
             'email'=>'janedoeh@gmail.com',
             'password' => 'initialpassword',
+            'password_confirm' => 'initialpassword'
             
         ];
 
         $this->model->expects($this->once())
                     ->method('insert')
-                    ->with($user)
+                    ->with($this->callback(function($input){
+                        return $input['password']=== $input['password_confirm']&&
+                        strlen($input['firstname']) >=3 &&
+                        strlen($input['lastname']) >=3 &&
+                        filter_var($input['email'], FILTER_VALIDATE_EMAIL) && 
+                        strlen($input['password'])>=8;
+
+
+                    }))
                     ->willReturn(true);
         
         $result = $this->model->insert($user);

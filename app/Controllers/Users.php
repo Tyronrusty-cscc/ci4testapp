@@ -6,6 +6,12 @@ use App\Models\UserModel;
 
 class Users extends BaseController
 {
+	private $userModel;
+
+    public function _construct(UserModel $model = null)
+	{
+		$this->userModel = $model ?? new UserModel();
+	}
     public function index()
     {
         $data =[];
@@ -79,7 +85,7 @@ class Users extends BaseController
 				$data['validation'] = $this->validator;
 				log_message('debug', 'Validation failed: ' . print_r($this->validator->getErrors(), true));
 			} else {
-				$model = new UserModel();
+				//$model = new UserModel();
 	
 				$newData = [
 					'firstname' => $this->request->getVar('firstname'),
@@ -90,7 +96,7 @@ class Users extends BaseController
 	
 				log_message('debug', 'Data to be saved: ' . print_r($newData, true));
 	
-				if ($model->save($newData)) {
+				if ($this->$userModel->save($newData)) {
 					log_message('debug', 'User data saved successfully.');
 					$session = session();
 					$session->setFlashdata('success', 'Successful Registration');

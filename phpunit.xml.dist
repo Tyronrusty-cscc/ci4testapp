@@ -42,6 +42,7 @@
         </exclude>
     </source>
     <php>
+        <ini name="session.auto_start" value="0"/>
         <env name="CI_ENVIRONMENT" value="testing"/>
         <server name="app.baseURL" value="http://example.com/"/>
         <!-- Directory containing phpunit.xml -->

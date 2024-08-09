@@ -5,41 +5,35 @@ namespace Tests\App\Models;
 use App\Models\UserModel;
 use CodeIgniter\Test\CIUnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use CodeIgniter\Test\ControllerTestTrait;
+use CodeIgniter\Test\DatabaseTestTrait;
+use CodeIgniter\Config\Services;
+use App\Controllers\Users;
 
-class UserModelTest extends CIUnitTestCase
+class UserModelTester extends CIUnitTestCase
 {
- private $userModel;
+    use ControllerTestTrait;
+    use DatabaseTestTrait;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->userModel = new UserModel();
-    }
+ 
+ public function testRegister()
+ {
+    $body =[
+        'firstname' =>'john',
+        'lastname' =>'doe',
+        'email' => 'johndoe@gmail.com',
+        'password' => 'password123',
+        'password_confirm' => 'password123',
+    ];
 
-    public function testBeforeInsertCallbackHashesPassword()
-    {
-        $userData = [
-            'firstname' => 'John',
-            'lastname' => 'Doe',
-            'email' => 'john.doe@example.com',
-            'password' => 'plainpassword',
-        ];
-
-        // Directly call the beforeInsert method to test password hashing
-        $processedData = $this->invokeMethod($this->userModel, 'beforeInsert', [['data' => $userData]]);
-
-        // Assertions
-        $this->assertNotEquals('plainpassword', $processedData['data']['password']);
-        $this->assertTrue(password_verify('plainpassword', $processedData['data']['password']));
-    }
-
-    protected function invokeMethod($object, $methodName, array $parameters = [])
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
-    }
+    $result = $this->withBody(http_build_query($body))
+                   ->withURI('https://webdev.cscc.edu/trtest3/register')
+                   ->controller(\App\Controller\Users::class)
+                   ->execute('register');
+    $this->assertTrue($result->isOK());
+    $this->assertTrue($result->isRedirect());
+    $this->assertSessionHas('success','Sucessful Registration');
+    
+ }
 
 }
