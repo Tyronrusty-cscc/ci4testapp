@@ -1,44 +1,60 @@
 <?php
-namespace App\Controllers;
 
+namespace Tests\App\Controllers;
+
+
+use App\Controllers\Users;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\ControllerTestTrait;
-use CodeIgniter\Test\DatabaseTestTrait;
+use CodeIgniter\Config\Services;
 
-Class UserControllerTest extends CIUnitTestCase
+class UserControllerTest extends CIUnitTestCase
 {
     use ControllerTestTrait;
 
-    public function testIndex(){
-        $result = $this->withUri('https://webdev.cscc.edu/trtest3/register')
-                      ->controller(\App\Controllers\Users::class)
-                      ->execute('register');
-
-        $this->assertTrue($result->isOk());
-        $this->assertStringContainsString('<form',$result->getBody());
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Start the session manually
+        $this->mockSession();
     }
 
-    // public function testingRegistration()
-    // {
-    //     $result = $this->withUri('https://webdev.cscc.edu/trtest3/register')
-    //                    ->withMethod('post')
-    //                    ->withBody([
-    //                     'firstname' => 'jo',
-    //                     'lastname'=>'doe',
-    //                     'email'=>'someEmail',
-    //                     'password'=>'short',
-    //                     'password_confirm'=>'different'
-    //                    ])
-    //                 ->controller(App\Controllers\Users::class)
-    //                 ->execute('register');
-
-    //     $this->assertTrue($result->isOk());
-    //     $this->assertStringContainsString('The Email field must contain a valid email address.', $result->getBody());
-    //     $this->assertStringContainsString('The password field must be at least 8 characters in length.', $result->getBody());
-    //     $this->assertStringContainsString('The password Confirm field does not match the password field.', $result->getBody());
 
 
+    public function testRegisterSuccess()
+    {
+        // Set up mock POST data with valid inputs
+        $postData = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john.doe@example.com',
+            'password' => 'password123',
+            'password_confirm' => 'password123',
+        ];
 
-    // }
+        // Create a mock request with the POST data
+        $result = $this->withRequest($this->createRequest($postData))
+                       ->controller(Users::class)
+                       ->execute('register');
 
+        // Check for a successful registration
+        $this->assertTrue($result->isOK(), 'Registration did not succeed as expected.');
+        $this->assertTrue(session()->has('success'), 'Success message not found in session.');
+        $this->assertEquals('Successful Registration', session()->get('success'), 'Unexpected success message.');
+    }
+
+    private function createRequest(array $postData)
+    {
+        $request = Services::request();
+        $request->setMethod('post');
+        $request->setGlobal('post', $postData);
+        return $request;
+    }
+
+    protected function mockSession()
+    {
+        $_SESSION = [];
+        Services::injectMock('session', \Config\Services::session());
+        Services::session()->start();
+    }
 }

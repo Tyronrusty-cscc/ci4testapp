@@ -57,4 +57,14 @@
       </div>
     </div>
   </div>
+
+  <!-- Add this in your application/Views/register.php or wherever the registration form is located -->
+<div id="disclaimerModal" class="disclaimer-modal">
+    <div class="disclaimer-content">
+        <span class="close">&times;</span>
+        <h2>Disclaimer</h2>
+        <p>Please read the following terms and conditions carefully before registering.</p>
+        <button id="agreeBtn">I Agree</button>
+    </div>
+</div>
 </div>
