@@ -1,0 +1,62 @@
+name: PHPUnit
+
+
+on:
+    push:
+      branches:
+        - main  # Trigger the workflow on push events to the main branch
+      paths:
+          - '**.php'
+          - 'composer.*'
+          - 'phpunit*'
+         
+    pull_request:
+      branches:
+        - '*'  # Trigger the workflow on pull requests targeting any branch
+      paths:
+          - '**.php'
+          - 'composer.*'
+          - 'phpunit*'
+
+jobs:
+  phpunit:
+    name: Run PHPUnit tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3.6'
+        extensions: mbstring, pdo, pdo_mysql, curl  # Add any required PHP extensions
+        coverage: none
+        tools: composer  # Ensure composer is available
+
+    - name: Get Composer Cache Directory
+      run: echo "COMPOSER_CACHE_FILES_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.COMPOSER_CACHE_FILES_DIR }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    - name: Install dependencies
+      run: |
+        if [ -f composer.lock ]; then
+          composer install ${{ env.COMPOSER_UPDATE_FLAGS }} --no-progress --no-interaction --prefer-dist --optimize-autoloader
+        else
+          composer update ${{ env.COMPOSER_UPDATE_FLAGS }} --no-progress --no-interaction --prefer-dist --optimize-autoloader
+        fi
+      env:
+        COMPOSER_UPDATE_FLAGS: ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
+
+    - name: Test with PHPUnit
+      run: vendor/bin/phpunit --verbose --coverage-text --testsuite main
+      env:
+        TERM: xterm-256color
+        TACHYCARDIA_MONITOR_GA: enabled
