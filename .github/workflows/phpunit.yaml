@@ -22,7 +22,13 @@ jobs:
   phpunit:
     name: Run PHPUnit tests
     runs-on: ubuntu-latest
-
+    strategy:
+        matrix:
+          php-version: ['7.4', '8.0', '8.1']
+          dependencies: ['highest', 'lowest']
+    env:
+        COMPOSER_UPDATE_FLAGS: ${{ github.event_name == 'push' && '--prefer-stable --prefer-lowest' || '' }}
+  
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -58,8 +64,17 @@ jobs:
       env:
         TERM: xterm-256color
 
-   
-
+    - name: Install dependencies
+      run: |
+          if [ -f composer.lock ]; then
+            composer install ${{ env.COMPOSER_UPDATE_FLAGS }} --no-progress --no-interaction --prefer-dist --optimize-autoloader
+          else
+            composer update ${{ env.COMPOSER_UPDATE_FLAGS }} --no-progress --no-interaction --prefer-dist --optimize-autoloader
+          fi
+      env:
+            COMPOSER_UPDATE_FLAGS: ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
+  
+ 
     - name: Test with PHPUnit
       run: vendor/bin/phpunit --verbose --coverage-text --testsuite App
       env:
