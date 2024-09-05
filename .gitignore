@@ -123,6 +123,6 @@ nb-configuration.xml
 .vscode/
 
 /results/
-/phpunit*.xml
+#/phpunit*.xml
 # saml permission file
 app/Config/Permissions.usr
