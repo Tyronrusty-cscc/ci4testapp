@@ -11,7 +11,7 @@
       <div class="container">
         <h3>Update Employee</h3>
         <hr>
-        <form class="" action="/trtest3/employee/update/<?= $id?>" method="post" id="employee_update">
+        <form class="" action="/trci4testapp/employee/update/<?= $id?>" method="post" id="employee_update">
           <div class="row">
             <div class="col-12 col-sm-6">
               <div class="form-group">
