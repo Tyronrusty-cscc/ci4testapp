@@ -121,7 +121,6 @@ nb-configuration.xml
 
 # Visual Studio Code
 .vscode/
-phpunit.xml.dist 
 /results/
 /phpunit*.xml
 # saml permission file
