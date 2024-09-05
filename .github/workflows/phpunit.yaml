@@ -4,19 +4,10 @@ on:
   push:
     branches:
       - main  # Trigger the workflow on push events to the main branch
-    paths:
-        - '**.php'
-        - 'composer.*'
-        - 'phpunit*'
-       
   pull_request:
     branches:
       - '*'  # Trigger the workflow on pull requests targeting any branch
-    paths:
-        - '**.php'
-        - 'composer.*'
-        - 'phpunit*'
-        
+
 jobs:
   run-tests:
     name: Execute PHPUnit Tests
@@ -47,8 +38,6 @@ jobs:
       - name: Run PHPUnit tests
         run: k:/data/CodeIgniter-4.4.5-Shared/vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
 
-        
-        
       - name: Check PHP version and installed extensions
         run: |
           php -v
