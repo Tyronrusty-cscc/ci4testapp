@@ -10,6 +10,7 @@ class SAMLAuth implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
+	
     log_message('debug', "*** CSCC SAML Authentication and Authorization Filter Starting ***");
     // Retrieve the configuration settings.  
     $config = new \Config\CSCCSAMLAuth();
