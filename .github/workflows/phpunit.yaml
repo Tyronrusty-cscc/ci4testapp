@@ -1,48 +1,54 @@
-name: PHPUnit
+name: PHPUnit Tests
 
 on:
   push:
     branches:
-      - main   
+      - main  # Trigger the workflow on push events to the main branch
+    paths:
+        - '**.php'
+        - 'composer.*'
+        - 'phpunit*'
+       
   pull_request:
     branches:
-      - '*'   
-
+      - '*'  # Trigger the workflow on pull requests targeting any branch
+    paths:
+        - '**.php'
+        - 'composer.*'
+        - 'phpunit*'
+        
 jobs:
-  phpunit:
-    name: Run PHPUnit tests
-    runs-on: ubuntu-latest
+  run-tests:
+    name: Execute PHPUnit Tests
+    runs-on: ubuntu-latest  # Specify the runner environment
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3  # Check out the repository content
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3.6'
-        extensions: mbstring, pdo, pdo_mysql, curl  # Add any required PHP extensions
-        coverage: none
-        tools: composer  # Ensure composer is available
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2  # Set up PHP environment
+        with:
+          php-version: '8.3.6'  # Define the PHP version
+          extensions: mbstring, pdo, pdo_mysql, curl , xdebug # Specify PHP extensions required
+          coverage: xdebug  # Configure code coverage (optional)
+      - name : Check installed PHP modules
+        run: php -m
 
-    - name: Get Composer Cache Directory
-      id: composer-cache
-      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --no-suggest  # Install PHP dependencies
 
-    - name: Cache Composer dependencies
-      uses: actions/cache@v2
-      with:
-        path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-composer-
+      - name: Make PHPUnit executable
+        run: chmod +x vendor/bin/phpunit 
 
-    - name: Install Composer dependencies
-      run: composer install --no-progress --prefer-dist --no-suggest --optimize-autoloader
+      - name: Make bootstrap readable
+        run: chmod +r tests/bootstrap.php 
 
-    - name: Run PHPUnit tests
-      run: vendor/bin/phpunit --configuration phpunit.xml
+      - name: Run PHPUnit tests
+        run: k:/data/CodeIgniter-4.4.5-Shared/vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
 
-    - name: Test with PHPUnit
-      run: vendor/bin/phpunit --verbose --coverage-text --testsuite main
-      env:
-        TERM: xterm-256color
+        
+      - name: Check PHP version and installed extensions
+        run: |
+          php -v
+          php -m  # Optional: List installed PHP modules
