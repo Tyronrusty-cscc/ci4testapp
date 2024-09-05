@@ -48,6 +48,7 @@ jobs:
         run: k:/data/CodeIgniter-4.4.5-Shared/vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
 
         
+        
       - name: Check PHP version and installed extensions
         run: |
           php -v
