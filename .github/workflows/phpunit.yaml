@@ -3,10 +3,10 @@ name: PHPUnit
 on:
   push:
     branches:
-      - main   # Run the tests on push to the main branch
+      - main   
   pull_request:
     branches:
-      - '*'   # Run the tests on pull requests to the main branch
+      - '*'   
 
 jobs:
   phpunit:
