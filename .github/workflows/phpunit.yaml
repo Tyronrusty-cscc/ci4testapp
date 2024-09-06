@@ -21,22 +21,18 @@ jobs:
         uses: shivammathur/setup-php@v2  # Set up PHP environment
         with:
           php-version: '8.3.6'  # Define the PHP version
-          extensions: mbstring, pdo, pdo_mysql, curl , xdebug # Specify PHP extensions required
+          extensions: mbstring, pdo, pdo_mysql, curl, xdebug # Specify PHP extensions required
           coverage: xdebug  # Configure code coverage (optional)
-      - name : Check installed PHP modules
-        run: php -m
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --no-suggest  # Install PHP dependencies
-
-      - name: Make PHPUnit executable
-        run: chmod +x vendor/bin/phpunit 
-
-      - name: Make bootstrap readable
-        run: chmod +r tests/bootstrap.php 
+        run: |
+          composer install --no-progress --prefer-dist --no-suggest  # Install PHP dependencies
 
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
+        run: vendor/bin/phpunit --verbose --coverage-text 
+        env:
+          TERM: xterm-256color
+          TACHYCARDIA_MONITOR_GA: enabled
 
       - name: Check PHP version and installed extensions
         run: |
