@@ -37,6 +37,8 @@ unset($source);
 require CONFIGPATH . 'Paths.php';
 $paths = new Paths();
 
+require_once __DIR__ . '/../app/Common.php'; 
+
 // Define necessary framework path constants
 defined('APPPATH')       || define('APPPATH', realpath(rtrim($paths->appDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
 defined('WRITEPATH')     || define('WRITEPATH', realpath(rtrim($paths->writableDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
