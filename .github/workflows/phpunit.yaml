@@ -24,4 +24,4 @@ jobs:
       - name: Check PHPUnit Version
         run: ./vendor/bin/phpunit --version
       - name: Run PHPUnit tests
-        run: ./vendor/bin/phpunit --verbose --coverage-text
+        run: ./vendor/bin/phpunit --debug --coverage-text
