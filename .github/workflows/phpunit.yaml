@@ -16,7 +16,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'  # Adjust as needed
+          php-version: '8.1'  # Adjust as needed
           extensions: mbstring, dom  # Add other needed extensions
           coverage: xdebug
       - name: Install Dependencies
