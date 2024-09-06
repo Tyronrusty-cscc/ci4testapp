@@ -36,7 +36,7 @@ jobs:
         run: chmod +r tests/bootstrap.php 
 
       - name: Run PHPUnit tests
-        run: k:/data/CodeIgniter-4.4.5-Shared/vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
+        run: vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
 
       - name: Check PHP version and installed extensions
         run: |
