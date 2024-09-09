@@ -30,6 +30,7 @@ jobs:
           echo "Listing vendor directory:"
           ls -alh vendor/
 
+          
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit --verbose --coverage-text --configuration phpunit.xml
         env:
