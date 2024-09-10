@@ -24,10 +24,9 @@
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <testdoxHtml outputFile="build/logs/testdox.html"/>
-        <testdoxText outputFile="build/logs/testdox.txt"/>
-        <junit outputFile="build/logs/logfile.xml"/>
+      <logging>
+        <log type="testdox-text" target="build/logs/testdox.txt"/>
+        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
     </logging>
     <source>
        <include>
