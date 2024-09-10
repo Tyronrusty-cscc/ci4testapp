@@ -27,8 +27,8 @@ jobs:
        
 
       - name: Install Composer Dependencies
-        uses: php-actions/composer@v6
-      - run: echo "Composer dependencies have been installed"
+        run: composer install --ignore-platform-reqs
+
 
       - name: Verify PHP Setup
         run: |
