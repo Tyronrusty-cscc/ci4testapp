@@ -11,8 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-      - uses: php-actions/composer@v6
-      - run: echo "Composer dependencies have been installed"
-      - run: vendor/bin/phpunit --configuration phpunit.xml 
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        # This step checks out your repository content into the GitHub Actions runner.
+
+      - name: Display Repository Name
+        run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+        # This step echoes the name of the repository that has been checked out.
+
+      - name: Setup PHP with Composer and Required Extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3.6'  # Adjust as per your project's PHP version requirement
+          extensions: mbstring, intl
+          tools: composer, phpunit
+        # This step sets up PHP with the specified version and installs necessary PHP extensions and tools.
+
+      - name: Install Composer Dependencies
+        run: composer install --no-progress --prefer-dist
+        # This step installs the PHP dependencies defined in your composer.json using Composer.
+
+        
+      - name: Verify PHP Setup
+        run: |
+          php -v
+          php -m
+        # Optional step to print the PHP version and list the loaded PHP modules.
+
+      - name: Run PHPUnit Tests
+        run: vendor/bin/phpunit
+        # This step runs the PHPUnit tests defined in your project.
