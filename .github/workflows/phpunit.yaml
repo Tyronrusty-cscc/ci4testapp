@@ -28,10 +28,14 @@ jobs:
         # This step sets up PHP with the specified version and installs necessary PHP extensions and tools.
 
       - name: Install Composer Dependencies
-        run: composer install --no-progress --prefer-dist
+        uses: php-actions/composer@v6
+        with :
+          command: install
+          interaction: no
+          dev: yes
         # This step installs the PHP dependencies defined in your composer.json using Composer.
 
-        
+
       - name: Verify PHP Setup
         run: |
           php -v
