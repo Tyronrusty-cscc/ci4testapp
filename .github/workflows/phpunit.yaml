@@ -11,32 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'  # Set to your required PHP version
-          extensions: mbstring, pdo, pdo_mysql, curl, xml
-          coverage: xdebug
-          tools: composer, phpunit
-
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Check for vendor directory
-        run: |
-          echo "Listing vendor directory:"
-          ls -alh vendor/
-
-
-      - name: Run PHPUnit tests
-        run: vendor/bin/phpunit  --configuration phpunit.xml
-        env:
-          TERM: xterm-256color
-
-      - name: Display PHP version and installed extensions
-        run: |
-          php -v
-          php -m
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - uses: php-actions/composer@v6
+      - run: echo "Composer dependencies have been installed"
+      - run: vendor/bin/phpunit --configuration phpunit.xml 

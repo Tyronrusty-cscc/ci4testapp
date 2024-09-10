@@ -37,8 +37,6 @@ unset($source);
 require CONFIGPATH . 'Paths.php';
 $paths = new Paths();
 
-require_once __DIR__ . '/../app/Common.php'; 
-
 // Define necessary framework path constants
 defined('APPPATH')       || define('APPPATH', realpath(rtrim($paths->appDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
 defined('WRITEPATH')     || define('WRITEPATH', realpath(rtrim($paths->writableDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
@@ -56,7 +54,7 @@ if (is_file(APPPATH . 'Common.php')) {
     require_once APPPATH . 'Common.php';
 }
 
-require_once SYSTEMPATH . '/../app/Common.php';
+require_once SYSTEMPATH . 'Common.php';
 
 // Set environment values that would otherwise stop the framework from functioning during tests.
 if (! isset($_SERVER['app.baseURL'])) {
