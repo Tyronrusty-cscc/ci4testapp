@@ -30,9 +30,9 @@ jobs:
           echo "Listing vendor directory:"
           ls -alh vendor/
 
-          
+
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit --verbose --coverage-text --configuration phpunit.xml
+        run: vendor/bin/phpunit  --configuration phpunit.xml
         env:
           TERM: xterm-256color
 
