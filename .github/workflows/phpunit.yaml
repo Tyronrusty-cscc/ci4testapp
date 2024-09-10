@@ -24,16 +24,11 @@ jobs:
         with:
           php-version: '8.3.6'  # Adjust as per your project's PHP version requirement
           extensions: mbstring, intl
-          tools: composer, phpunit
-        # This step sets up PHP with the specified version and installs necessary PHP extensions and tools.
+       
 
       - name: Install Composer Dependencies
         uses: php-actions/composer@v6
-        with :
-          command: install
-          interaction: no
-          dev: yes
-        # This step installs the PHP dependencies defined in your composer.json using Composer.
+      - run: echo "Composer dependencies have been installed"
 
 
       - name: Verify PHP Setup
@@ -43,5 +38,5 @@ jobs:
         # Optional step to print the PHP version and list the loaded PHP modules.
 
       - name: Run PHPUnit Tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit  --configuration phpunit.xml
         # This step runs the PHPUnit tests defined in your project.
