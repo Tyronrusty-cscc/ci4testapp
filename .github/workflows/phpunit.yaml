@@ -30,7 +30,6 @@ jobs:
         uses: php-actions/composer@v6
       - run: echo "Composer dependencies have been installed"
 
-
       - name: Verify PHP Setup
         run: |
           php -v
