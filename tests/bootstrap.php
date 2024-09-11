@@ -68,7 +68,7 @@ if (is_file(APPPATH . 'Common.php')) {
     require_once APPPATH . 'Common.php';
 }
 
-require_once SYSTEMPATH . 'Common.php';
+require_once SYSTEMPATH . '/../app/Common.php';
 
 // Set environment values that would otherwise stop the framework from functioning during tests.
 if (! isset($_SERVER['app.baseURL'])) {
