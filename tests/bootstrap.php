@@ -57,18 +57,24 @@ echo "Trying to load: " . APPPATH . 'Common.php' . "\n";
 require_once ROOTPATH . 'vendor/autoload.php';
 
 // Explicitly include Common.php from the app directory.
-$commonPath = APPPATH . 'Common.php';
-if (!file_exists($commonPath)) {
-    die("The file Common.php was not found at: {$commonPath}");
+require_once __DIR__ . '/../app/Common.php';
+
+echo "Trying to load: " . __DIR__ . '/../app/Common.php' . PHP_EOL;
+if (file_exists(__DIR__ . '/../app/Common.php')) {
+    echo "Common.php found." . PHP_EOL;
+} else {
+    echo "Common.php not found." . PHP_EOL;
+    exit(1);  // Stop execution if the file is not found
 }
-require_once $commonPath;
+
+
 
 
 if (is_file(APPPATH . 'Common.php')) {
     require_once APPPATH . 'Common.php';
 }
 
-require_once SYSTEMPATH . '/../app/Common.php';
+require_once SYSTEMPATH . 'Common.php';
 
 // Set environment values that would otherwise stop the framework from functioning during tests.
 if (! isset($_SERVER['app.baseURL'])) {
