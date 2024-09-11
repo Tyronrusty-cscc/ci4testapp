@@ -50,8 +50,6 @@ jobs:
 
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit --configuration phpunit.xml
-
-      - name: Check PHP version and installed extensions
-        run: |
-          php --ini
-          php -m  
+        env : 
+          APPPATH: ${{ github.workspace}}/app/
+      

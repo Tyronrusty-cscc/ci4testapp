@@ -51,8 +51,6 @@ defined('VENDORPATH')    || define('VENDORPATH', realpath(HOMEPATH . 'vendor') .
 
 // Load Common.php from App then System
 
-define('SYSTEMPATH', ROOTPATH . 'system' . DIRECTORY_SEPARATOR);
-define('TESTPATH', ROOTPATH . 'tests' . DIRECTORY_SEPARATOR);
 echo "Trying to load: " . APPPATH . 'Common.php' . "\n";
 
 // Include the Composer autoloader.
