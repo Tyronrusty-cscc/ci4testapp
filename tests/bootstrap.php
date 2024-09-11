@@ -50,7 +50,23 @@ defined('COMPOSER_PATH') || define('COMPOSER_PATH', (string) realpath(HOMEPATH .
 defined('VENDORPATH')    || define('VENDORPATH', realpath(HOMEPATH . 'vendor') . DIRECTORY_SEPARATOR);
 
 // Load Common.php from App then System
+define('ROOTPATH', realpath(__DIR__ . '/..') . DIRECTORY_SEPARATOR);
+define('APPPATH', ROOTPATH . 'app' . DIRECTORY_SEPARATOR);
+define('SYSTEMPATH', ROOTPATH . 'system' . DIRECTORY_SEPARATOR);
+define('TESTPATH', ROOTPATH . 'tests' . DIRECTORY_SEPARATOR);
 echo "Trying to load: " . APPPATH . 'Common.php' . "\n";
+
+// Include the Composer autoloader.
+require_once ROOTPATH . 'vendor/autoload.php';
+
+// Explicitly include Common.php from the app directory.
+$commonPath = APPPATH . 'Common.php';
+if (!file_exists($commonPath)) {
+    die("The file Common.php was not found at: {$commonPath}");
+}
+require_once $commonPath;
+
+
 if (is_file(APPPATH . 'Common.php')) {
     require_once APPPATH . 'Common.php';
 }
