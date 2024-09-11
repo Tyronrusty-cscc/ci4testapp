@@ -50,6 +50,7 @@ defined('COMPOSER_PATH') || define('COMPOSER_PATH', (string) realpath(HOMEPATH .
 defined('VENDORPATH')    || define('VENDORPATH', realpath(HOMEPATH . 'vendor') . DIRECTORY_SEPARATOR);
 
 // Load Common.php from App then System
+
 if (is_file(APPPATH . 'Common.php')) {
     require_once APPPATH . 'Common.php';
 }
@@ -72,6 +73,17 @@ require_once SYSTEMPATH . 'Autoloader/Autoloader.php';
 require_once SYSTEMPATH . 'Config/BaseService.php';
 require_once SYSTEMPATH . 'Config/Services.php';
 require_once APPPATH . 'Config/Services.php';
+require_once APPPATH . 'Common.php';
+//debbuging for common and app path
+echo "ROOTPATH: " . ROOTPATH . "\n";
+echo "APPPATH: " . APPPATH . "\n";
+echo "Trying to load: " . APPPATH . 'Common.php' . "\n";
+
+if (!file_exists(APPPATH . 'Common.php')) {
+    die('Failed to locate Common.php');
+} else {
+    require_once APPPATH . 'Common.php';
+}
 
 // Initialize and register the loader with the SPL autoloader stack.
 Services::autoloader()->initialize(new Autoload(), new Modules())->register();
