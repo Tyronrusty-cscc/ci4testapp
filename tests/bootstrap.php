@@ -50,8 +50,7 @@ defined('COMPOSER_PATH') || define('COMPOSER_PATH', (string) realpath(HOMEPATH .
 defined('VENDORPATH')    || define('VENDORPATH', realpath(HOMEPATH . 'vendor') . DIRECTORY_SEPARATOR);
 
 // Load Common.php from App then System
-define('ROOTPATH', realpath(__DIR__ . '/..') . DIRECTORY_SEPARATOR);
-define('APPPATH', ROOTPATH . 'app' . DIRECTORY_SEPARATOR);
+
 define('SYSTEMPATH', ROOTPATH . 'system' . DIRECTORY_SEPARATOR);
 define('TESTPATH', ROOTPATH . 'tests' . DIRECTORY_SEPARATOR);
 echo "Trying to load: " . APPPATH . 'Common.php' . "\n";

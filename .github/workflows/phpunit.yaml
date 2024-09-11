@@ -35,7 +35,20 @@ jobs:
       - name: Make bootstrap readable
         run: chmod +r tests/bootstrap.php 
 
-
+      - name: Debugging File Paths
+        run: |
+          echo "Checking paths..."
+          echo "ROOTPATH: $ROOTPATH"
+          echo "APPPATH: $APPPATH"
+          echo "Listing APPPATH contents:"
+          ls -la $APPPATH
+          echo "Trying to load Common.php from: $APPPATH/Common.php"
+          if [ -f $APPPATH/Common.php ]; then
+            echo "Common.php found."
+          else
+            echo "Common.php not found."
+            exit 1
+          fi
       - name: Verify PHP Setup
         run: |
           php -v
