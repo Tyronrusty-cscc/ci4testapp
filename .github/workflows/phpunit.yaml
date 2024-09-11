@@ -29,6 +29,12 @@ jobs:
       - name: Install Composer Dependencies
         run: composer install --ignore-platform-reqs
 
+      - name: Make PHPUnit executable
+        run: chmod +x vendor/bin/phpunit 
+
+      - name: Make bootstrap readable
+        run: chmod +r tests/bootstrap.php 
+
 
       - name: Verify PHP Setup
         run: |
@@ -37,5 +43,5 @@ jobs:
         # Optional step to print the PHP version and list the loaded PHP modules.
 
       - name: Run PHPUnit Tests
-        run: vendor/bin/phpunit  --configuration phpunit.xml
+        run: php vendor/bin/phpunit  tests/unit
         # This step runs the PHPUnit tests defined in your project.
