@@ -6,55 +6,47 @@ on:
       - main  # Adjust if your default branch has a different name
 
 jobs:
-  run-tests:
-    name: Execute PHPUnit Tests
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
-        # This step checks out your repository content into the GitHub Actions runner.
 
-      - name: Display Repository Name
-        run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-        # This step echoes the name of the repository that has been checked out.
+      - name: Set Environment Variables
+        run: |
+          echo "ROOTPATH=${GITHUB_WORKSPACE}/" >> $GITHUB_ENV
+          echo "APPPATH=${GITHUB_WORKSPACE}/app/" >> $GITHUB_ENV
 
-      - name: Setup PHP with Composer and Required Extensions
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3.6'  # Adjust as per your project's PHP version requirement
-          extensions: mbstring, intl
-       
-
-      - name: Install Composer Dependencies
-        run: composer install --ignore-platform-reqs
-
-      - name: Make PHPUnit executable
-        run: chmod +x vendor/bin/phpunit 
-
-      - name: Make bootstrap readable
-        run: chmod +r tests/bootstrap.php 
-
-      - name: Debugging File Paths
+      - name: Echo paths for debugging
         run: |
           echo "Checking paths..."
           echo "ROOTPATH: $ROOTPATH"
           echo "APPPATH: $APPPATH"
-          echo "Listing APPPATH contents:"
+          echo "Listing contents in APPPATH:"
           ls -la $APPPATH
-          echo "Trying to load Common.php from: $APPPATH/Common.php"
-          if [ -f $APPPATH/Common.php ]; then
+
+      - name: Setup PHP Environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: php-actions/composer@v6
+        with:
+          command: install
+
+      - name: Check if Common.php exists
+        run: |
+          echo "Trying to load Common.php from: ${APPPATH}Common.php"
+          if [ -f "${APPPATH}Common.php" ]; then
             echo "Common.php found."
           else
             echo "Common.php not found."
             exit 1
           fi
-      - name: Verify PHP Setup
-        run: |
-          php -v
-          php -m
-        # Optional step to print the PHP version and list the loaded PHP modules.
 
-      - name: Run PHPUnit Tests
-        run: php vendor/bin/phpunit  tests/unit
-        # This step runs the PHPUnit tests defined in your project.
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --configuration phpunit.xml
