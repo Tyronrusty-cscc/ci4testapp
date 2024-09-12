@@ -1,54 +1,55 @@
 name: PHPUnit Tests
 
 on:
-  push:
-    branches:
-      - main  # Trigger the workflow on push events to the main branch
-    paths:
-        - '**.php'
-        - 'composer.*'
-        - 'phpunit*'
-       
   pull_request:
     branches:
-      - '*'  # Trigger the workflow on pull requests targeting any branch
-    paths:
-        - '**.php'
-        - 'composer.*'
-        - 'phpunit*'
-        
+      - main  # Adjust if your default branch has a different name
+
 jobs:
-  run-tests:
-    name: Execute PHPUnit Tests
-    runs-on: ubuntu-latest  # Specify the runner environment
+  build-test:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3  # Check out the repository content
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2  # Set up PHP environment
+      - name: Set Environment Variables
+        run: |
+          echo "ROOTPATH=${GITHUB_WORKSPACE}/" >> $GITHUB_ENV
+          echo "APPPATH=${GITHUB_WORKSPACE}/app/" >> $GITHUB_ENV
+
+      - name: Echo paths for debugging
+        run: |
+          echo "Checking paths..."
+          echo "ROOTPATH: $ROOTPATH"
+          echo "APPPATH: $APPPATH"
+          echo "Listing contents in APPPATH:"
+          ls -la $APPPATH
+
+      - name: Setup PHP Environment
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3.6'  # Define the PHP version
-          extensions: mbstring, pdo, pdo_mysql, curl , xdebug # Specify PHP extensions required
-          coverage: xdebug  # Configure code coverage (optional)
-      - name : Check installed PHP modules
-        run: php -m
+          php-version: '8.1'
+          extensions: mbstring, intl
+          coverage: none
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --no-suggest  # Install PHP dependencies
+        uses: php-actions/composer@v6
+        with:
+          command: install --ignore-platform-reqs
 
-      - name: Make PHPUnit executable
-        run: chmod +x vendor/bin/phpunit 
-
-      - name: Make bootstrap readable
-        run: chmod +r tests/bootstrap.php 
+      - name: Check if Common.php exists
+        run: |
+          echo "Trying to load Common.php from: ${APPPATH}Common.php"
+          if [ -f "${APPPATH}Common.php" ]; then
+            echo "Common.php found."
+          else
+            echo "Common.php not found."
+            exit 1
+          fi
 
       - name: Run PHPUnit tests
-        run: k:/data/CodeIgniter-4.4.5-Shared/vendor/bin/phpunit --configuration phpunit.xml  # Execute PHPUnit tests
-
-        
-      - name: Check PHP version and installed extensions
-        run: |
-          php -v
-          php -m  # Optional: List installed PHP modules
+        run: vendor/bin/phpunit --configuration phpunit.xml
+        env : 
+          APPPATH: ${{ github.workspace}}/app/
+      
