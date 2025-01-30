@@ -120,3 +120,5 @@ and include any additional steps to be run before tests in the `setUp()` method.
 you will need to rename **phpunit.xml.dist** to **phpunit.xml**, uncomment the database
 configuration lines and add your connection details. Prevent **phpunit.xml** from being
 tracked in your repo by adding it to **.gitignore**.
+
+
