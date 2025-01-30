@@ -43,7 +43,7 @@ jobs:
             echo " Framework version is unchanged."
           fi
 
-=
+
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2  # Set up PHP environment
