@@ -29,8 +29,8 @@ jobs:
 
       - name: Detect framework version change
         run: |
-          OLD_VERSION=$(git show HEAD^:config/paths.php | grep "public \$systemDirectory" | cut -d '=' -f2 | tr -d " ';")
-          NEW_VERSION=$(grep "public \$systemDirectory" config/paths.php | cut -d '=' -f2 | tr -d " ';")
+          OLD_VERSION=$(git show HEAD^:Config/Paths.php | grep "public \$systemDirectory" | cut -d '=' -f2 | tr -d " ';")
+          NEW_VERSION=$(grep "public \$systemDirectory" Config/Paths.php | cut -d '=' -f2 | tr -d " ';")
 
           echo "Previous system directory: $OLD_VERSION"
           echo "Current system directory: $NEW_VERSION"
